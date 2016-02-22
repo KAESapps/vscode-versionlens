@@ -22,9 +22,9 @@ export abstract class AbstractCodeLensProvider {
   protected jsonService: JsonService;
   protected appConfig: AppConfiguration;
 
-  constructor(appConfig: AppConfiguration) {
+  constructor(appConfig: AppConfiguration, jsonService: JsonService) {
     this._disposables = [];
-    this.jsonService = new JsonService();
+    this.jsonService = jsonService;
     this.appConfig = appConfig;
   }
 

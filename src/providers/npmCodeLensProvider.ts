@@ -11,7 +11,7 @@ CodeLens,
 TextDocument
 } from 'vscode';
 
-import {IXHRResponse} from '../services/jsonService';
+import {JsonService, IXHRResponse} from '../services/jsonService';
 import {PackageCodeLens} from '../models/packageCodeLens';
 import {AppConfiguration} from '../models/appConfiguration';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
@@ -21,17 +21,24 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider implements Cod
 
   private packageDependencyKeys: string[] = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-  constructor(config: AppConfiguration) {
-    super(config);
+  constructor(config: AppConfiguration, jsonService: JsonService) {
+    super(config, jsonService);
   }
 
-  provideCodeLenses(document: TextDocument, token: CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
+  provideCodeLenses(document, token: CancellationToken) {
     const jsonDoc = this.jsonService.parseJson(document.getText());
     const collector: PackageCodeLensList = new PackageCodeLensList(document);
 
+    if (jsonDoc === null || jsonDoc.root === null)
+      return [];
+
+    if (jsonDoc.validationResult.errors.length > 0)
+      return [];
+
     jsonDoc.root.getChildNodes().forEach((node) => {
-      if (this.packageDependencyKeys.indexOf(node.key.value) !== -1)
+      if (this.packageDependencyKeys.indexOf(node.key.value) !== -1) {
         collector.addRange(node.value.getChildNodes());
+      }
     });
 
     return collector.list;

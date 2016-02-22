@@ -12,6 +12,7 @@ CodeLens,
 TextDocument
 } from 'vscode';
 
+import {JsonService} from '../services/jsonService'
 import {PackageCodeLens} from '../models/packageCodeLens';
 import {AppConfiguration} from '../models/appConfiguration';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
@@ -21,8 +22,8 @@ export class BowerCodeLensProvider extends AbstractCodeLensProvider implements C
 
   private packageDependencyKeys: string[] = ['dependencies', 'devDependencies'];
 
-  constructor(appConfig: AppConfiguration) {
-    super(appConfig);
+  constructor(appConfig: AppConfiguration, jsonService: JsonService) {
+    super(appConfig, jsonService);
   }
 
   provideCodeLenses(document: TextDocument, token: CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
