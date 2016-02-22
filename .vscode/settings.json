@@ -2,7 +2,7 @@
 {
   "editor.tabSize": 2,
   "files.exclude": {
-    "node_modules": false,
+    "node_modules": true,
     "out": false // set this to true to hide the "out" folder with the compiled JS files
   },
   "search.exclude": {

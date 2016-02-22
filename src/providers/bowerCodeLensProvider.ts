@@ -26,9 +26,15 @@ export class BowerCodeLensProvider extends AbstractCodeLensProvider implements C
     super(appConfig, jsonService);
   }
 
-  provideCodeLenses(document: TextDocument, token: CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
+  provideCodeLenses(document, token: CancellationToken) {
     const jsonDoc = this.jsonService.parseJson(document.getText());
     const collector: PackageCodeLensList = new PackageCodeLensList(document);
+
+    if (jsonDoc === null || jsonDoc.root === null)
+      return [];
+
+    if (jsonDoc.validationResult.errors.length > 0)
+      return [];
 
     jsonDoc.root.getChildNodes().forEach((node) => {
       if (this.packageDependencyKeys.indexOf(node.key.value) !== -1)
