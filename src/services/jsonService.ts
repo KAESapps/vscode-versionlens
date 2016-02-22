@@ -25,7 +25,7 @@ export class JsonService {
     return this.jsonParser.parse(text);
   }
 
-  createHttpRequest(queryUrl): Thenable<IXHRResponse> {
+  createHttpRequest(queryUrl: string): Thenable<IXHRResponse> {
     return this.httpRequest.xhr({ url: queryUrl });
   }
 }

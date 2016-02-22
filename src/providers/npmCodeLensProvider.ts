@@ -47,13 +47,13 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider implements Cod
   resolveCodeLens(codeLensItem: CodeLens, token: CancellationToken): Thenable<CodeLens> {
     if (codeLensItem instanceof PackageCodeLens) {
 
-      if (codeLensItem.parent === true) {
-        this.makeUpdateDependenciesCommand(codeLensItem);
-        return;
-      }
+      // if (codeLensItem.parent === true) {
+      //   super.makeUpdateDependenciesCommand(codeLensItem);
+      //   return;
+      // }
 
       if (codeLensItem.packageVersion === 'latest') {
-        this.makeLatestCommand(codeLensItem);
+        super.makeLatestCommand(codeLensItem);
         return;
       }
 
@@ -61,18 +61,18 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider implements Cod
       return this.jsonService.createHttpRequest(queryUrl)
         .then((response: IXHRResponse) => {
           if (response.status != 200) {
-            return this.makeErrorCommand(response.status, response.responseText, codeLensItem);
+            return super.makeErrorCommand(response.status, response.responseText, codeLensItem);
           }
 
           const serverObj = JSON.parse(response.responseText);
           if (!serverObj || !serverObj.version) {
-            return this.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem);
+            return super.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem);
           }
 
-          return this.makeVersionCommand(codeLensItem.packageVersion, serverObj.version, codeLensItem);
+          return super.makeVersionCommand(codeLensItem.packageVersion, serverObj.version, codeLensItem);
         }, (response: IXHRResponse) => {
           const respObj = JSON.parse(response.responseText);
-          return this.makeErrorCommand(response.status, respObj.error, codeLensItem);
+          return super.makeErrorCommand(response.status, respObj.error, codeLensItem);
         });
     }
   }

@@ -173,5 +173,6 @@ describe("BowerCodeLensProvider", () => {
         done();
       });
     });
+
   });
 });
