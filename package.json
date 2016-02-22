@@ -1,6 +1,10 @@
 {
   "name": "vscode-versionlens",
   "description": "Shows the latest version for each package using code lens",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pflannery/vscode-versionlens.git"
+  },
   "author": "Peter Flannery",
   "license": "MIT",
   "version": "0.0.1",
