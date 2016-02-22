@@ -1,5 +1,6 @@
 {
   "name": "vscode-versionlens",
+  "private": true,
   "description": "Shows the latest version for each package using code lens",
   "repository": {
     "type": "git",
@@ -31,7 +32,8 @@
   "scripts": {
     "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
     "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
     "typescript": "^1.7.5",
