@@ -1,0 +1,51 @@
+{
+  "name": "vscode-versionlens",
+  "description": "Shows the latest version for each package using code lens",
+  "author": "Peter Flannery",
+  "license": "MIT",
+  "version": "0.0.1",
+  "publisher": "vscode",
+  "engines": {
+    "vscode": "0.10.x"
+  },
+  "keywords": [
+    "vscode",
+    "versions",
+    "packages",
+    "npm",
+    "bower"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:json"
+  ],
+  "main": "./out/src/extension",
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+  },
+  "devDependencies": {
+    "typescript": "^1.7.5",
+    "vscode": "^0.11.1"
+  },
+  "dependencies": {
+    "bower": "^1.7.7",
+    "semver": "^5.1.0",
+    "vscode-languageclient": "^1.4.2"
+  },
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Version prefix",
+      "properties": {
+        "versionlens.versionPrefix": {
+          "type": "string",
+          "default": "",
+          "description": "Applies the provided prefix before with the latest version when clicking on the code lens link."
+        }
+      }
+    }
+  }
+}
