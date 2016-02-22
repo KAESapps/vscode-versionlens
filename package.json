@@ -4,7 +4,9 @@
   "author": "Peter Flannery",
   "license": "MIT",
   "version": "0.0.1",
-  "publisher": "vscode",
+  "publisher": "peterflannery",
+  "displyName": "Version Lens",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "0.10.x"
   },
