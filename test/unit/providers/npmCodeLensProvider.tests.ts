@@ -13,15 +13,15 @@ import {NpmCodeLensProvider} from '../../../src/providers/npmCodeLensProvider';
 import {AppConfiguration} from '../../../src/models/AppConfiguration';
 import {JsonService} from '../../../src/services/JsonService';
 
-suite("NpmCodeLensProvider", () => {
+describe("NpmCodeLensProvider", () => {
 
   const testPath = path.join(__dirname, '../../../..', 'test');
   const fixturePath = path.join(testPath, 'fixtures');
   const fixtureMap = new TestFixtureMap(fixturePath);
 
-  suite("provideCodeLenses", () => {
+  describe("provideCodeLenses", () => {
 
-    test("returns empty array when the document json is invalid", () => {
+    it("returns empty array when the document json is invalid", () => {
       let appConfig = new AppConfiguration();
       let jsonService = new JsonService();
       let provider = new NpmCodeLensProvider(appConfig, jsonService);
@@ -36,7 +36,7 @@ suite("NpmCodeLensProvider", () => {
       assert.ok(codeLens.length === 0, "codeLens should be an empty array.");
     });
 
-    test("returns empty array when the document text is empty", () => {
+    it("returns empty array when the document text is empty", () => {
       let appConfig = new AppConfiguration();
       let jsonService = new JsonService();
       let provider = new NpmCodeLensProvider(appConfig, jsonService);
@@ -50,7 +50,7 @@ suite("NpmCodeLensProvider", () => {
       assert.ok(codeLens.length === 0, "codeLens should be an empty array.");
     });
 
-    test("returns empty array when the package has no dependencies", () => {
+    it("returns empty array when the package has no dependencies", () => {
       let appConfig = new AppConfiguration();
       let jsonService = new JsonService();
       let provider = new NpmCodeLensProvider(appConfig, jsonService);
@@ -65,7 +65,7 @@ suite("NpmCodeLensProvider", () => {
       assert.ok(codeLens.length === 0, "codeLens should be an empty array.");
     });
 
-    test("returns array of given dependencies to be resolved", () => {
+    it("returns array of given dependencies to be resolved", () => {
       let appConfig = new AppConfiguration();
       let jsonService = new JsonService();
       let provider = new NpmCodeLensProvider(appConfig, jsonService);
@@ -89,7 +89,7 @@ suite("NpmCodeLensProvider", () => {
 
   });
 
-  suite("resolveCodeLens", () => {
+  describe("resolveCodeLens", () => {
 
 
   });

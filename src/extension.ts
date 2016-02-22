@@ -3,6 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 'use strict';
+const bowerService = require('bower');
 
 import {Disposable, ExtensionContext, DocumentSelector, languages, commands} from 'vscode';
 import {NpmCodeLensProvider} from './providers/npmCodeLensProvider';
@@ -29,7 +30,7 @@ export function activate(context: ExtensionContext) {
 
   const disposables: Disposable[] = [];
   disposables.push(languages.registerCodeLensProvider(npmSelector, new NpmCodeLensProvider(config, jsonService)));
-  disposables.push(languages.registerCodeLensProvider(bowerSelector, new BowerCodeLensProvider(config, jsonService)));
+  disposables.push(languages.registerCodeLensProvider(bowerSelector, new BowerCodeLensProvider(config, jsonService, bowerService)));
   disposables.push(commands.registerCommand(`_${config.extentionName}.updateDependencyCommand`, updateDependencyCommand));
   disposables.push(commands.registerCommand(`_${config.extentionName}.updateDependenciesCommand`, updateDependenciesCommand));
 

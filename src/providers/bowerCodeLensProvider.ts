@@ -3,7 +3,6 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 'use strict';
-const bower = require('bower');
 
 import {
 CodeLensProvider,
@@ -21,9 +20,14 @@ import {PackageCodeLensList} from '../lists/packageCodeLensList'
 export class BowerCodeLensProvider extends AbstractCodeLensProvider implements CodeLensProvider {
 
   private packageDependencyKeys: string[] = ['dependencies', 'devDependencies'];
+  private bowerService;
 
-  constructor(appConfig: AppConfiguration, jsonService: JsonService) {
+  constructor(appConfig: AppConfiguration, jsonService: JsonService, bowerService) {
     super(appConfig, jsonService);
+    if (!bowerService) {
+      throw new ReferenceError("BowerCodeLensProvider is missing a reference to bower.")
+    }
+    this.bowerService = bowerService;
   }
 
   provideCodeLenses(document, token: CancellationToken) {
@@ -47,20 +51,22 @@ export class BowerCodeLensProvider extends AbstractCodeLensProvider implements C
   resolveCodeLens(codeLensItem: CodeLens, token: CancellationToken): Thenable<CodeLens> {
     if (codeLensItem instanceof PackageCodeLens) {
       if (codeLensItem.packageVersion === 'latest') {
-        this.makeLatestCommand(codeLensItem);
+        super.makeLatestCommand(codeLensItem);
         return;
       }
 
       return new Promise<CodeLens>((success) => {
-        bower.commands.info(codeLensItem.packageName)
+        this.bowerService.commands.info(codeLensItem.packageName)
           .on('end', (info) => {
-            if (!info || !info.latest)
-              success(this.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem));
+            if (!info || !info.latest) {
+              success(super.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem));
+              return;
+            }
 
-            success(this.makeVersionCommand(codeLensItem.packageVersion, info.latest.version, codeLensItem));
+            success(super.makeVersionCommand(codeLensItem.packageVersion, info.latest.version, codeLensItem));
           })
           .on('error', (err) => {
-            success(this.makeErrorCommand(-1, err.message, codeLensItem));
+            success(super.makeErrorCommand(-1, err.message, codeLensItem));
           });
       });
 
