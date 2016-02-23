@@ -5,17 +5,18 @@
 'use strict';
 
 import {workspace, Range, Uri, TextEdit, WorkspaceEdit} from 'vscode';
+import {PackageCodeLens} from './models/packageCodeLens';
 
-export function updateDependencyCommand(uri: Uri, packageVersion: string, range: Range) {
+export function updateDependencyCommand(codeLens: PackageCodeLens, packageVersion: string) {
   const edit = new WorkspaceEdit();
-  const edits = [TextEdit.replace(range, packageVersion)];
-  edit.set(uri, edits);
-  workspace.applyEdit(edit);
+  const edits = [TextEdit.replace(codeLens.range, packageVersion)];
+  edit.set(codeLens.uri, edits);
+  return workspace.applyEdit(edit);
 }
 
-export function updateDependenciesCommand(uri: Uri, packageVersion: string, range: Range) {
-  const edit = new WorkspaceEdit();
-  const edits = [TextEdit.replace(range, packageVersion)];
-  edit.set(uri, edits);
-  workspace.applyEdit(edit);
+export function updateDependenciesCommand(codeLens: PackageCodeLens, packageVersion: string) {
+  // const edit = new WorkspaceEdit();
+  // const edits = [TextEdit.replace(codeLens.range, packageVersion)];
+  // edit.set(codeLens.uri, edits);
+  // workspace.applyEdit(edit);
 }

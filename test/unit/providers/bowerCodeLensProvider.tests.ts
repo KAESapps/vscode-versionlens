@@ -27,16 +27,7 @@ describe("BowerCodeLensProvider", () => {
     const jsonService = new JsonService();
     bowerServiceMock = {
       commands: {
-        info: (packageName: string) => {
-          return {
-            on: (eventName, callback) => {
-              if (eventName === 'end')
-                callback({});
-              else
-                callback({});
-            }
-          }
-        }
+        info: null
       }
     };
     testProvider = new BowerCodeLensProvider(appConfig, jsonService, bowerServiceMock);
@@ -167,9 +158,8 @@ describe("BowerCodeLensProvider", () => {
       testProvider.resolveCodeLens(codeLens, null).then(result => {
         assert.equal(result.command.title, '&uarr; ^3.2.1');
         assert.equal(result.command.command, '_versionlens.updateDependencyCommand');
-        assert.equal(result.command.arguments[0], null);
+        //assert.equal(result.command.arguments[0], null);
         assert.equal(result.command.arguments[1], '"^3.2.1"');
-        assert.equal(result.command.arguments[2], null);
         done();
       });
     });

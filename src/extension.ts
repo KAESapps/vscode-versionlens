@@ -31,8 +31,9 @@ export function activate(context: ExtensionContext) {
   const disposables: Disposable[] = [];
   disposables.push(languages.registerCodeLensProvider(npmSelector, new NpmCodeLensProvider(config, jsonService)));
   disposables.push(languages.registerCodeLensProvider(bowerSelector, new BowerCodeLensProvider(config, jsonService, bowerService)));
+
   disposables.push(commands.registerCommand(`_${config.extentionName}.updateDependencyCommand`, updateDependencyCommand));
-  disposables.push(commands.registerCommand(`_${config.extentionName}.updateDependenciesCommand`, updateDependenciesCommand));
+  // disposables.push(commands.registerCommand(`_${config.extentionName}.updateDependenciesCommand`, updateDependenciesCommand));
 
   context.subscriptions.push(...disposables);
 }

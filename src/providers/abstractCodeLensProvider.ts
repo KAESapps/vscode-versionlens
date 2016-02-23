@@ -23,6 +23,12 @@ export abstract class AbstractCodeLensProvider {
   protected appConfig: AppConfiguration;
 
   constructor(appConfig: AppConfiguration, jsonService: JsonService) {
+    if (!appConfig) {
+      throw new ReferenceError("AbstractCodeLensProvider was given an invalid reference to appConfig.")
+    }
+    if (!jsonService) {
+      throw new ReferenceError("AbstractCodeLensProvider was given an invalid reference to jsonService.")
+    }
     this._disposables = [];
     this.jsonService = jsonService;
     this.appConfig = appConfig;
@@ -50,9 +56,8 @@ export abstract class AbstractCodeLensProvider {
         title: `&uarr; ${this.appConfig.versionPrefix}${checkVersion}`,
         command: `_${this.appConfig.extentionName}.updateDependencyCommand`,
         arguments: [
-          codeLensItem.uri,
-          `"${this.appConfig.versionPrefix}${checkVersion}"`,
-          codeLensItem.range
+          codeLensItem,
+          `"${this.appConfig.versionPrefix}${checkVersion}"`
         ]
       };
     } else {
