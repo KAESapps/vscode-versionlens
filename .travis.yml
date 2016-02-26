@@ -13,6 +13,7 @@ before_install:
       sh -e /etc/init.d/xvfb start;
       sleep 3;
     fi
+  - pip install codecov
 
 install:
   - npm install
@@ -20,3 +21,6 @@ install:
 
 script:
   - npm test --silent
+
+after_success:
+  - codecov
