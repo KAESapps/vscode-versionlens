@@ -3,9 +3,8 @@ sudo: false
 os:
   - linux
 
-language: node_js
-node_js:
-  - "5"
+env:
+  - CODE_TESTS_PATH="$TRAVIS_BUILD_DIR/test"
 
 before_install:
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
