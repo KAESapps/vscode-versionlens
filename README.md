@@ -5,7 +5,9 @@
 [![Dev Dependency Status](https://img.shields.io/david/dev/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens#info=devDependencies)<br/>
 [![Gratipay donate button](https://img.shields.io/gratipay/pflannery.svg)](https://www.gratipay.com/pflannery/ "Donate weekly to this project using Gratipay")
 
-Shows the latest version for each package using code lens. (Currenlty only works for NPM and Bower)
+Shows the latest version for an npm or bower package using the code lens interface. 
+
+**Note:** Currently replaces the version text but does not automatically install packages when clicking a code lens link.
 
 ## Install
 
