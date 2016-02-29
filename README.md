@@ -13,9 +13,7 @@ Shows the latest version for each package using code lens. (Currenlty only works
 
 ### Preview
 
-![Screenshot](images/screenshot-1.png)
-
-![Screenshot](images/screenshot-2.png)
+![Screenshot](images/animated-preview.gif)
 
 ### Sponsors
 
