@@ -10,8 +10,8 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import {TestFixtureMap} from '../../testUtils';
 import {NpmCodeLensProvider} from '../../../src/providers/npmCodeLensProvider';
-import {AppConfiguration} from '../../../src/models/AppConfiguration';
-import {JsonService, IXHRResponse} from '../../../src/services/JsonService';
+import {AppConfiguration} from '../../../src/models/appConfiguration';
+import {JsonService, IXHRResponse} from '../../../src/services/jsonService';
 import {PackageCodeLens} from '../../../src/models/packageCodeLens';
 
 describe("NpmCodeLensProvider", () => {
