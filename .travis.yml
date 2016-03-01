@@ -6,7 +6,7 @@ os:
   - linux
 
 env:
-  - CODE_TESTS_PATH="$TRAVIS_BUILD_DIR/test"
+  - CODE_TESTS_PATH="$TRAVIS_BUILD_DIR/out/test"
 
 before_install:
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
