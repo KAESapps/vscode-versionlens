@@ -34,7 +34,8 @@
     "watch": "node ./node_modules/vscode/bin/compile -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test",
-    "clean": "rimraf ./node_modules ./out"
+    "clean": "rm -r ./out",
+    "compile": "tsc"
   },
   "devDependencies": {
     "typescript": "^1.8.2",
