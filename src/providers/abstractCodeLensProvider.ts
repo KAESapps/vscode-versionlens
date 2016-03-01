@@ -6,11 +6,11 @@
 const semver = require('semver');
 
 import {
-Disposable,
-TextDocument,
-Position,
-Range,
-Uri
+  Disposable,
+  TextDocument,
+  Position,
+  Range,
+  Uri
 } from 'vscode';
 
 import {AppConfiguration} from '../models/appConfiguration';

@@ -7,7 +7,7 @@ export class AppConfiguration {
   }
 
   get versionPrefix() {
-    let config = workspace.getConfiguration('versionVisibility');
+    let config = workspace.getConfiguration('versionlens');
     return config.get("versionPrefix", "^");
   }
 
