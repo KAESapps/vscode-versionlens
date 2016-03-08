@@ -8,8 +8,11 @@ os:
   - linux
 
 env:
-  - CODE_TESTS_PATH="$TRAVIS_BUILD_DIR/out/test"
-  - CXX=g++-4.8
+  global:
+    - CODE_TESTS_PATH="$TRAVIS_BUILD_DIR/out/test"
+    - CXX=g++-4.8
+    - CODE_DOWNLOAD_URL=https://go.microsoft.com/fwlink/?LinkID=620884 # 0.10.10 release
+
 addons:
   apt:
     sources:
