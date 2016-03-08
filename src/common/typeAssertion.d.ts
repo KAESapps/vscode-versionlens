@@ -2,17 +2,17 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {workspace} from 'vscode';
+export function assertInstanceOf(
+  param: any,
+  expectedParamType: any,
+  msgOnFail: string
+): void;
 
-export class AppConfiguration {
+export function assertTypeOf(
+  param: any,
+  expectedParamType: any,
+  msgOnFail: string
+): void;
 
-  get extentionName() {
-    return "versionlens";
-  }
-
-  get versionPrefix() {
-    let config = workspace.getConfiguration('versionlens');
-    return config.get("versionPrefix", "");
-  }
-
-}
+export function assertDefined(param: any, msgOnFail: string): void;
+export function assertEmpty(param: any, msgOnFail: string): void;

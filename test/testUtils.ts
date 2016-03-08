@@ -1,9 +1,7 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Peter Flannery. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
-'use strict';
-
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Peter Flannery. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import * as pathUtils from 'path';
 import * as fs from 'fs';
 
@@ -14,7 +12,7 @@ export interface TestFixture {
 }
 
 export class TestFixtureMap {
-  private cache;
+  private cache: { [filePath: string]: TestFixture };
   private fixtureRootPath: string;
 
   constructor(fixtureRootPath: string) {

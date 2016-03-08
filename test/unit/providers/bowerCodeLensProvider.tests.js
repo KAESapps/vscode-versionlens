@@ -2,32 +2,36 @@
  * Copyright (c) Peter Flannery. All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
-'use strict';
+const semver = require('semver');
 
 import * as assert from 'assert';
 import * as path from 'path';
-
 import * as vscode from 'vscode';
+import {register} from '../../../src/common/di';
 import {TestFixtureMap} from '../../testUtils';
-import {NpmCodeLensProvider} from '../../../src/providers/npmCodeLensProvider';
+import {BowerCodeLensProvider} from '../../../src/providers/bowerCodeLensProvider';
 import {AppConfiguration} from '../../../src/models/appConfiguration';
-import {JsonService, IXHRResponse} from '../../../src/services/jsonService';
 import {PackageCodeLens} from '../../../src/models/packageCodeLens';
 
-describe("NpmCodeLensProvider", () => {
-
+describe("BowerCodeLensProvider", () => {
   const testPath = path.join(__dirname, '../../../..', 'test');
   const fixturePath = path.join(testPath, 'fixtures');
   const fixtureMap = new TestFixtureMap(fixturePath);
 
-  let testProvider: NpmCodeLensProvider;
-  let jsonServiceMock: JsonService;
+  let bowerMock;
+  let testProvider;
 
   beforeEach(() => {
-    const appConfig = new AppConfiguration();
-    jsonServiceMock = new JsonService();
+    bowerMock = {
+      commands: {
+        info: null
+      }
+    };
+    register('bower', bowerMock);
+    register('semver', semver);
 
-    testProvider = new NpmCodeLensProvider(appConfig, jsonServiceMock);
+    const appConfig = new AppConfiguration();
+    testProvider = new BowerCodeLensProvider(appConfig);
   });
 
   describe("provideCodeLenses", () => {
@@ -36,7 +40,7 @@ describe("NpmCodeLensProvider", () => {
       let fixture = fixtureMap.read('package-invalid.json');
 
       let testDocument = {
-        getText: (range?: vscode.Range) => fixture.content
+        getText: range => fixture.content
       };
 
       let codeLens = testProvider.provideCodeLenses(testDocument, null);
@@ -46,7 +50,7 @@ describe("NpmCodeLensProvider", () => {
 
     it("returns empty array when the document text is empty", () => {
       let testDocument = {
-        getText: (range?: vscode.Range) => ''
+        getText: range => ''
       };
 
       let codeLens = testProvider.provideCodeLenses(testDocument, null);
@@ -56,9 +60,8 @@ describe("NpmCodeLensProvider", () => {
 
     it("returns empty array when the package has no dependencies", () => {
       let fixture = fixtureMap.read('package-no-deps.json');
-
       let testDocument = {
-        getText: (range?: vscode.Range) => fixture.content
+        getText: range => fixture.content
       };
 
       let codeLens = testProvider.provideCodeLenses(testDocument, null);
@@ -70,8 +73,8 @@ describe("NpmCodeLensProvider", () => {
       let fixture = fixtureMap.read('package-with-deps.json');
 
       let testDocument = {
-        getText: (range?: vscode.Range) => fixture.content,
-        positionAt: (offset: number): vscode.Position => new vscode.Position(0, 0),
+        getText: (range) => fixture.content,
+        positionAt: (offset) => new vscode.Position(0, 0),
         fileName: fixture.basename
       };
 
@@ -83,45 +86,30 @@ describe("NpmCodeLensProvider", () => {
         assert.equal(entry.packageName, `dep${index + 1}`, `dependency name should be dep${index + 1}.`);
       });
     });
-
   });
 
   describe("resolveCodeLens", () => {
 
     it("when code lens package version is 'latest' codeLens should return LatestCommand", () => {
-      const codeLens: PackageCodeLens = new PackageCodeLens(null, null, 'SomePackage', 'latest', false);
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', 'latest', false);
       testProvider.resolveCodeLens(codeLens, null);
       assert.equal(codeLens.command.title, 'latest', "Expected command.title failed.");
       assert.equal(codeLens.command.command, undefined);
       assert.equal(codeLens.command.arguments, undefined);
     });
 
-    it("when npm does not return status 200 then codeLens should return ErrorCommand", (done) => {
-      const codeLens: PackageCodeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-
-      jsonServiceMock.createHttpRequest = (queryUrl: string): Thenable<IXHRResponse> => {
-        return Promise.resolve({
-          status: 404,
-          responseText: 'Not found'
-        });
-      };
-
-      testProvider.resolveCodeLens(codeLens, null).then(result => {
-        assert.equal(result.command.title, 'Error 404. Not found', "Expected command.title failed.");
-        assert.equal(result.command.command, undefined);
-        assert.equal(result.command.arguments, undefined);
-        done();
-      });
-    });
-
-    it("when null response object returned from npm then codeLens should return ErrorCommand", (done) => {
-      const codeLens: PackageCodeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-
-      jsonServiceMock.createHttpRequest = (queryUrl: string): Thenable<IXHRResponse> => {
-        return Promise.resolve({
-          status: 200,
-          responseText: null
-        });
+    it("when null info object returned from bower then codeLens should return ErrorCommand", (done) => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      bowerMock.commands.info = packageName => {
+        let result;
+        result = {
+          on: (eventName, callback) => {
+            if (eventName === 'end')
+              callback(null);
+            return result;
+          }
+        };
+        return result;
       };
 
       testProvider.resolveCodeLens(codeLens, null).then(result => {
@@ -132,14 +120,18 @@ describe("NpmCodeLensProvider", () => {
       });
     });
 
-    it("when response version is missing then codeLens should return ErrorCommand", (done) => {
-      const codeLens: PackageCodeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-
-      jsonServiceMock.createHttpRequest = (queryUrl: string): Thenable<IXHRResponse> => {
-        return Promise.resolve({
-          status: 200,
-          responseText: '{}'
-        });
+    it("when null info.latest object returned from bower then codeLens should return ErrorCommand", (done) => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      bowerMock.commands.info = packageName => {
+        let result;
+        result = {
+          on: (eventName, callback) => {
+            if (eventName === 'end')
+              callback({});
+            return result;
+          }
+        };
+        return result;
       };
 
       testProvider.resolveCodeLens(codeLens, null).then(result => {
@@ -150,14 +142,18 @@ describe("NpmCodeLensProvider", () => {
       });
     });
 
-    it("when valid response object returned from npm then codeLens should return VersionCommand", (done) => {
-      const codeLens: PackageCodeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-
-      jsonServiceMock.createHttpRequest = (queryUrl: string): Thenable<IXHRResponse> => {
-        return Promise.resolve({
-          status: 200,
-          responseText: '{"version": "3.2.1"}'
-        });
+    it("when valid info.latest object returned from bower then codeLens should return VersionCommand", (done) => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      bowerMock.commands.info = packageName => {
+        let result;
+        result = {
+          on: (eventName, callback) => {
+            if (eventName === 'end')
+              callback({ latest: { version: '3.2.1' } });
+            return result;
+          }
+        };
+        return result;
       };
 
       testProvider.resolveCodeLens(codeLens, null).then(result => {
@@ -170,5 +166,4 @@ describe("NpmCodeLensProvider", () => {
     });
 
   });
-
 });
