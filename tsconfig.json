@@ -6,9 +6,15 @@
     "outDir": "out",
     "noLib": true,
     "sourceMap": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true
   },
   "exclude": [
-    "node_modules"
+    "gruntfile.js",
+    "grunt",
+    "out",
+    "node_modules",
+    ".vscode",
+    ".vscode-test"
   ]
 }

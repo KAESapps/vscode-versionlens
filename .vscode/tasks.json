@@ -14,26 +14,23 @@
   "isShellCommand": true,
   "echoCommand": true,
   "suppressTaskName": true,
+  "args": [
+    "run",
+    "-s"
+  ],
   "tasks": [
     {
-      "taskName": "watch",
+      "taskName": "compile",
       "isBuildCommand": true,
-      "isWatching": true,
-      "problemMatcher": "$tsc-watch",
       "args": [
-        "run",
-        "watch",
-        "--loglevel",
-        "silent"
+        "compile"
       ]
     },
     {
-      "taskName": "clean",
+      "taskName": "test",
+      "isTestCommand": true,
       "args": [
-        "run",
-        "clean",
-        "--loglevel",
-        "silent"
+        "test"
       ]
     }
   ]
