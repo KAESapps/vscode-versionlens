@@ -13,7 +13,7 @@
       "stopOnEntry": false,
       "sourceMaps": true,
       "outDir": "${workspaceRoot}/out/src",
-      "preLaunchTask": "watch"
+      "preLaunchTask": "compile"
     },
     {
       "name": "Launch Tests",

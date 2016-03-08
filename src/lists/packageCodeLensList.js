@@ -25,20 +25,18 @@ export class PackageCodeLensList {
       this.document.positionAt(packageEntry.end)
     );
     const parent = packageEntry.type === 'object';
-
-    let packageValue = '';
-    if (parent === false)
-      packageValue = packageEntry.value.replace('^', '').replace('~', '')
-
-    if (resolve.semver.valid(packageValue) === null)
-      packageValue = '0.0.0';
+    // if (parent === false)
+    //   packageValue = resolve.semver.clean(packageEntry.value);
+    // let packageValue = '';
+    // if (resolve.semver.valid(packageValue) === null)
+    //   packageValue = '0.0.0';
 
     this.collection.push(
       new PackageCodeLens(
         range,
         Uri.file(this.document.fileName),
         packageEntry.name,
-        packageValue,
+        packageEntry.value,
         parent
       )
     );

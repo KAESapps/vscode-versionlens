@@ -33,21 +33,37 @@ export abstract class AbstractCodeLensProvider {
     return codeLensItem;
   }
 
-  makeVersionCommand(currentVersion, checkVersion, codeLensItem) {
-    if (checkVersion !== currentVersion
-      && (resolve.semver.gt(checkVersion, currentVersion) === true
-        || resolve.semver.lt(checkVersion, currentVersion) === true)) {
-      codeLensItem.command = {
-        title: `&uarr; ${this.appConfig.versionPrefix}${checkVersion}`,
-        command: `_${this.appConfig.extentionName}.updateDependencyCommand`,
-        arguments: [
-          codeLensItem,
-          `"${this.appConfig.versionPrefix}${checkVersion}"`
-        ]
-      };
-    } else {
-      this.makeLatestCommand(codeLensItem);
-    }
+  makeVersionCommand(currentVersion, serverVersion, codeLensItem) {
+    const satisfied = resolve.semver.satisfies(serverVersion, currentVersion);
+    const hasNewerVersion = resolve.semver.gtr(serverVersion, currentVersion) === true
+      || resolve.semver.ltr(serverVersion, currentVersion) === true;
+
+    if (this.appConfig.satisfyOnly && satisfied)
+      return this.makeSatisfiedCommand(codeLensItem);
+    else if (serverVersion !== currentVersion && hasNewerVersion)
+      return this.makeNewVersionCommand(serverVersion, codeLensItem)
+    else
+      return this.makeLatestCommand(codeLensItem);
+  }
+
+  makeNewVersionCommand(newerVersion, codeLensItem) {
+    codeLensItem.command = {
+      title: `&uarr; ${this.appConfig.versionPrefix}${newerVersion}`,
+      command: `_${this.appConfig.extentionName}.updateDependencyCommand`,
+      arguments: [
+        codeLensItem,
+        `"${this.appConfig.versionPrefix}${newerVersion}"`
+      ]
+    };
+    return codeLensItem;
+  }
+
+  makeSatisfiedCommand(codeLensItem) {
+    codeLensItem.command = {
+      title: 'satisfied',
+      command: undefined,
+      arguments: undefined
+    };
     return codeLensItem;
   }
 

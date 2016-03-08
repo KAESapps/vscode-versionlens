@@ -52,7 +52,7 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider {
       }
 
       const queryUrl = `http://registry.npmjs.org/${encodeURIComponent(codeLensItem.packageName)}/latest`;
-      return resolve.httpRequest.xhr.createHttpRequest(queryUrl)
+      return resolve.httpRequest.xhr({ url: queryUrl })
         .then(response => {
           if (response.status != 200)
             return super.makeErrorCommand(

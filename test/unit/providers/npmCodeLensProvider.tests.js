@@ -23,9 +23,12 @@ describe("NpmCodeLensProvider", () => {
   const fixtureMap = new TestFixtureMap(fixturePath);
 
   let testProvider;
-  let httpRequestMock = {
-    xhr: {}
-  };
+  let httpRequestMock = {};
+  let appConfigMock = new AppConfiguration();
+  let satisfyOnly;
+  let defaultVersionPrefix;
+  Object.defineProperty(appConfigMock, 'versionPrefix', { get: () => defaultVersionPrefix })
+  Object.defineProperty(appConfigMock, 'satisfyOnly', { get: () => satisfyOnly })
 
   beforeEach(() => {
     register('semver', semver);
@@ -33,10 +36,9 @@ describe("NpmCodeLensProvider", () => {
     register('httpRequest', httpRequestMock);
 
     // mock the config
-    const appConfig = new AppConfiguration();
-    Object.defineProperty(appConfig, 'versionPrefix', { get: () => '^' })
-
-    testProvider = new NpmCodeLensProvider(appConfig);
+    satisfyOnly = false;
+    defaultVersionPrefix = '^';
+    testProvider = new NpmCodeLensProvider(appConfigMock);
   });
 
   describe("provideCodeLenses", () => {
@@ -97,23 +99,26 @@ describe("NpmCodeLensProvider", () => {
 
   describe("resolveCodeLens", () => {
 
-    it("when code lens package version is 'latest' codeLens should return LatestCommand", () => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', 'latest', false);
+    it("passes url to httpRequest.xhr", done => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      httpRequestMock.xhr = options => {
+        assert.equal(options.url, 'http://registry.npmjs.org/SomePackage/latest', "Expected httpRequest.xhr(options.url) but failed.");
+        done();
+        return Promise.resolve({
+          status: 200,
+          responseText: null
+        });
+      };
       testProvider.resolveCodeLens(codeLens, null);
-      assert.equal(codeLens.command.title, 'latest', "Expected command.title failed.");
-      assert.equal(codeLens.command.command, undefined);
-      assert.equal(codeLens.command.arguments, undefined);
     });
 
     it("when npm does not return status 200 then codeLens should return ErrorCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-      httpRequestMock.xhr = {
-        createHttpRequest: queryUrl => {
-          return Promise.resolve({
-            status: 404,
-            responseText: 'Not found'
-          });
-        }
+      httpRequestMock.xhr = options => {
+        return Promise.resolve({
+          status: 404,
+          responseText: 'Not found'
+        });
       };
 
       testProvider.resolveCodeLens(codeLens, null).then(result => {
@@ -127,13 +132,11 @@ describe("NpmCodeLensProvider", () => {
     it("when null response object returned from npm then codeLens should return ErrorCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
 
-      httpRequestMock.xhr = {
-        createHttpRequest: queryUrl => {
-          return Promise.resolve({
-            status: 200,
-            responseText: null
-          });
-        }
+      httpRequestMock.xhr = options => {
+        return Promise.resolve({
+          status: 200,
+          responseText: null
+        });
       };
 
       testProvider.resolveCodeLens(codeLens, null).then(result => {
@@ -148,13 +151,11 @@ describe("NpmCodeLensProvider", () => {
     it("when response version is missing then codeLens should return ErrorCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
 
-      httpRequestMock.xhr = {
-        createHttpRequest: queryUrl => {
-          return Promise.resolve({
-            status: 200,
-            responseText: '{}'
-          });
-        }
+      httpRequestMock.xhr = options => {
+        return Promise.resolve({
+          status: 200,
+          responseText: '{}'
+        });
       };
 
       testProvider.resolveCodeLens(codeLens, null).then(result => {
@@ -165,25 +166,47 @@ describe("NpmCodeLensProvider", () => {
       });
     });
 
-    it("when valid response object returned from npm then codeLens should return VersionCommand", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-      httpRequestMock.xhr = {
-        createHttpRequest: queryUrl => {
-          return Promise.resolve({
-            status: 200,
-            responseText: '{"version": "3.2.1"}'
-          });
-        }
-      };
+    it("when a valid response returned from npm and package version is 'latest' then codeLens should return LatestCommand", () => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', 'latest', false);
+      testProvider.resolveCodeLens(codeLens, null);
+      assert.equal(codeLens.command.title, 'latest', "Expected command.title failed.");
+      assert.equal(codeLens.command.command, undefined);
+      assert.equal(codeLens.command.arguments, undefined);
+    });
 
+    it("when a valid response returned from npm and package version is 'not latest' then codeLens should return VersionCommand", done => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      httpRequestMock.xhr = options => {
+        return Promise.resolve({
+          status: 200,
+          responseText: '{"version": "3.2.1"}'
+        });
+      };
       testProvider.resolveCodeLens(codeLens, null).then(result => {
         assert.equal(result.command.title, '&uarr; ^3.2.1');
         assert.equal(result.command.command, '_versionlens.updateDependencyCommand');
-        //assert.equal(result.command.arguments[0], null);
         assert.equal(result.command.arguments[1], '"^3.2.1"');
         done();
       });
     });
+
+    it("when a valid response returned from npm and satisfyOnly=true and package version is satisfactory then codeLens should return SatisfiedCommand", done => {
+      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '~1.2.0', false);
+      httpRequestMock.xhr = options => {
+        return Promise.resolve({
+          status: 200,
+          responseText: '{"version": "1.2.4"}'
+        });
+      };
+      satisfyOnly = true;
+      testProvider.resolveCodeLens(codeLens, null).then(result => {
+        assert.equal(codeLens.command.title, 'satisfied', "Expected command.title failed.");
+        assert.equal(codeLens.command.command, undefined);
+        assert.equal(codeLens.command.arguments, undefined);
+        done();
+      });
+    });
+
 
   });
 

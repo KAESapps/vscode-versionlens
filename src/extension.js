@@ -10,6 +10,9 @@ import {updateDependencyCommand, updateDependenciesCommand} from './commands';
 import {AppConfiguration} from './models/appConfiguration';
 
 export function activate(context) {
+  if (bootstrapLoaded === false)
+    throw ReferenceError("VersionCodelens: didnt execute it's bootstrap.");
+
   const npmSelector = {
     language: 'json',
     scheme: 'file',
