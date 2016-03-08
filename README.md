@@ -14,10 +14,6 @@ Shows the latest version for an npm or bower package using the code lens interfa
 
 [How to install vscode extentions](https://code.visualstudio.com/docs/editor/extension-gallery)
 
-### Preview
-
-![Screenshot](images/animated-preview.gif)
-
 ### Available Workspace\\User Settings
 
 ```yaml
@@ -31,6 +27,16 @@ Shows the latest version for an npm or bower package using the code lens interfa
     default: false
     description: When set to true will check if the latest version is within the range specified by the local version and displays 'satisfied' if local version is in range.
 ```
+
+### Preview
+
+- default settings
+
+![Screenshot](images/animated-preview.gif)
+
+- when versionlens.satisfyOnly = true
+
+![Screenshot](images/animated-preview-2.gif)
 
 ### Contributors
 
