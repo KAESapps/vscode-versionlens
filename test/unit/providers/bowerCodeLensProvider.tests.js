@@ -30,7 +30,10 @@ describe("BowerCodeLensProvider", () => {
     register('bower', bowerMock);
     register('semver', semver);
 
+    // mock the config
     const appConfig = new AppConfiguration();
+    Object.defineProperty(appConfig, 'versionPrefix', { get: () => '^' })
+    
     testProvider = new BowerCodeLensProvider(appConfig);
   });
 

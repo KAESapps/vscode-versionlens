@@ -31,7 +31,11 @@ describe("NpmCodeLensProvider", () => {
     register('semver', semver);
     register('jsonParser', jsonParser);
     register('httpRequest', httpRequestMock);
+
+    // mock the config
     const appConfig = new AppConfiguration();
+    Object.defineProperty(appConfig, 'versionPrefix', { get: () => '^' })
+
     testProvider = new NpmCodeLensProvider(appConfig);
   });
 
@@ -163,7 +167,6 @@ describe("NpmCodeLensProvider", () => {
 
     it("when valid response object returned from npm then codeLens should return VersionCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
-
       httpRequestMock.xhr = {
         createHttpRequest: queryUrl => {
           return Promise.resolve({
