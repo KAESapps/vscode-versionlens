@@ -4,5 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import {PackageCodeLens} from './models/packageCodeLens';
 
-export function updateDependencyCommand(codeLens: PackageCodeLens, packageVersion: string);
-export function updateDependenciesCommand(codeLens: PackageCodeLens, packageVersion: string);
+export function updateDependencyCommand(
+  codeLens: PackageCodeLens,
+  packageVersion: string
+);
+
+export function updateDependenciesCommand(
+  codeLens: PackageCodeLens,
+  packageVersion: string
+);

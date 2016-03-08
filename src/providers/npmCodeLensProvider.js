@@ -11,7 +11,12 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider {
 
   constructor(config) {
     super(config);
-    this.packageDependencyKeys = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+    this.packageDependencyKeys = [
+      'dependencies',
+      'devDependencies',
+      'peerDependencies',
+      'optionalDependencies'
+    ];
   }
 
   provideCodeLenses(document, token) {
@@ -49,19 +54,33 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider {
       const queryUrl = `http://registry.npmjs.org/${encodeURIComponent(codeLensItem.packageName)}/latest`;
       return resolve.httpRequest.xhr.createHttpRequest(queryUrl)
         .then(response => {
-          if (response.status != 200) {
-            return super.makeErrorCommand(response.status, response.responseText, codeLensItem);
-          }
+          if (response.status != 200)
+            return super.makeErrorCommand(
+              response.status,
+              response.responseText,
+              codeLensItem
+            );
 
           const serverObj = JSON.parse(response.responseText);
-          if (!serverObj || !serverObj.version) {
-            return super.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem);
-          }
+          if (!serverObj || !serverObj.version)
+            return super.makeErrorCommand(
+              -1,
+              "Invalid object returned from server",
+              codeLensItem
+            );
 
-          return super.makeVersionCommand(codeLensItem.packageVersion, serverObj.version, codeLensItem);
+          return super.makeVersionCommand(
+            codeLensItem.packageVersion,
+            serverObj.version,
+            codeLensItem
+          );
         }, response => {
           const respObj = JSON.parse(response.responseText);
-          return super.makeErrorCommand(response.status, respObj.error, codeLensItem);
+          return super.makeErrorCommand(
+            response.status,
+            respObj.error,
+            codeLensItem
+          );
         });
     }
   }

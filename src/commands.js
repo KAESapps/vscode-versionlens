@@ -11,9 +11,6 @@ export function updateDependencyCommand(codeLens, packageVersion) {
   return workspace.applyEdit(edit);
 }
 
-export function updateDependenciesCommand(codeLens, packageVersion) {
-  // const edit = new WorkspaceEdit();
-  // const edits = [TextEdit.replace(codeLens.range, packageVersion)];
-  // edit.set(codeLens.uri, edits);
-  // workspace.applyEdit(edit);
-}
+// export function updateDependenciesCommand(codeLens, packageVersion) {
+
+// }

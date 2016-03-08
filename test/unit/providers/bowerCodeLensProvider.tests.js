@@ -33,7 +33,7 @@ describe("BowerCodeLensProvider", () => {
     // mock the config
     const appConfig = new AppConfiguration();
     Object.defineProperty(appConfig, 'versionPrefix', { get: () => '^' })
-    
+
     testProvider = new BowerCodeLensProvider(appConfig);
   });
 
@@ -101,7 +101,7 @@ describe("BowerCodeLensProvider", () => {
       assert.equal(codeLens.command.arguments, undefined);
     });
 
-    it("when null info object returned from bower then codeLens should return ErrorCommand", (done) => {
+    it("when null info object returned from bower then codeLens should return ErrorCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
       bowerMock.commands.info = packageName => {
         let result;
@@ -123,7 +123,7 @@ describe("BowerCodeLensProvider", () => {
       });
     });
 
-    it("when null info.latest object returned from bower then codeLens should return ErrorCommand", (done) => {
+    it("when null info.latest object returned from bower then codeLens should return ErrorCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
       bowerMock.commands.info = packageName => {
         let result;
@@ -145,7 +145,7 @@ describe("BowerCodeLensProvider", () => {
       });
     });
 
-    it("when valid info.latest object returned from bower then codeLens should return VersionCommand", (done) => {
+    it("when valid info.latest object returned from bower then codeLens should return VersionCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
       bowerMock.commands.info = packageName => {
         let result;

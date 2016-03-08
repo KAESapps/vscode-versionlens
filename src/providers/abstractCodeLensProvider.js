@@ -3,13 +3,17 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import {resolve} from '../common/di';
+import {assertInstanceOf} from '../common/typeAssertion';
+import {AppConfiguration} from '../models/appConfiguration';
 
 export abstract class AbstractCodeLensProvider {
 
   constructor(appConfig) {
-    if (!appConfig) {
-      throw new ReferenceError("AbstractCodeLensProvider was given an invalid reference to appConfig.")
-    }
+    assertInstanceOf(
+      appConfig,
+      AppConfiguration,
+      "AbstractCodeLensProvider: appConfig parameter is invalid"
+    );
     this._disposables = [];
     this.appConfig = appConfig;
   }
@@ -31,7 +35,8 @@ export abstract class AbstractCodeLensProvider {
 
   makeVersionCommand(currentVersion, checkVersion, codeLensItem) {
     if (checkVersion !== currentVersion
-      && (resolve.semver.gt(checkVersion, currentVersion) === true || resolve.semver.lt(checkVersion, currentVersion) === true)) {
+      && (resolve.semver.gt(checkVersion, currentVersion) === true
+        || resolve.semver.lt(checkVersion, currentVersion) === true)) {
       codeLensItem.command = {
         title: `&uarr; ${this.appConfig.versionPrefix}${checkVersion}`,
         command: `_${this.appConfig.extentionName}.updateDependencyCommand`,

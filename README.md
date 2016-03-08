@@ -1,13 +1,14 @@
 # Version Lens - VsCode Extension
 
+![Development Phase](http://img.shields.io/phase/alpha.png?color=yellowgreen)
+
 [![Build Status](https://img.shields.io/travis/pflannery/vscode-versionlens/master.svg)](http://travis-ci.org/pflannery/vscode-versionlens "Check this project's build status on TravisCI")
 [![Dependency Status](https://img.shields.io/david/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens)
 [![Dev Dependency Status](https://img.shields.io/david/dev/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens#info=devDependencies)<br/>
-[![Gratipay donate button](https://img.shields.io/gratipay/pflannery.svg)](https://www.gratipay.com/pflannery/ "Donate weekly to this project using Gratipay")
 
 Shows the latest version for an npm or bower package using the code lens interface. 
 
-**Note:** Currently replaces the version text but does not automatically install packages when clicking a code lens link.
+**Note:** Replaces the version text but does not automatically install packages when clicking a code lens link.
 
 ## Install
 
@@ -16,12 +17,6 @@ Shows the latest version for an npm or bower package using the code lens interfa
 ### Preview
 
 ![Screenshot](images/animated-preview.gif)
-
-### Sponsors
-
-No sponsors yet! Will you be the first?
-
-[![Gratipay donate button](https://img.shields.io/gratipay/pflannery.svg)](https://www.gratipay.com/pflannery/ "Donate weekly to this project using Gratipay")
 
 ### Contributors
 

@@ -12,7 +12,9 @@ register('bower', bower);
 import {extensions} from 'vscode';
 const jsonExt = extensions.getExtension('vscode.json');
 const jsonParser = require(jsonExt.extensionPath + '/server/out/jsonParser');
-const httpRequest = require(jsonExt.extensionPath + '/server/out/utils/httpRequest')
+const httpRequest = require(
+  jsonExt.extensionPath + '/server/out/utils/httpRequest'
+);
 register('jsonParser', jsonParser);
 register('httpRequest', httpRequest);
 

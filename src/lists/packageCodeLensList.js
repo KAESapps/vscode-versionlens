@@ -10,6 +10,10 @@ import {PackageCodeLens} from '../models/packageCodeLens';
 export class PackageCodeLensList {
 
   constructor(document) {
+    assertDefined(
+      document,
+      "PackageCodeLensList: document parameter is invalid"
+    );
     this.collection = [];
     this.document = document;
   }

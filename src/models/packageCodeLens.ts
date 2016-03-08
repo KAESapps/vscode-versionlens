@@ -10,7 +10,13 @@ export class PackageCodeLens extends CodeLens {
   packageVersion: string;
   parent: boolean;
 
-  constructor(range: Range, uri: Uri, packageName: string, packageVersion: string, parent: boolean) {
+  constructor(
+    range: Range,
+    uri: Uri,
+    packageName: string,
+    packageVersion: string,
+    parent: boolean
+  ) {
     super(range);
     this.uri = uri;
     this.packageName = packageName;
