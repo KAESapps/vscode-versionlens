@@ -20,12 +20,15 @@ Shows the latest version for an npm or bower package using the code lens interfa
   versionlens.versionPrefix:
     type: string
     default: ''
-    description: Applies the provided prefix before with the latest version when clicking on the code lens link.
+    description: >
+      Applies the provided prefix before with the latest version when clicking on the code lens link.
 
   versionlens.satisfyOnly:
     type: boolean
     default: false
-    description: When set to true will check if the latest version is within the range specified by the local version and displays 'satisfied' if local version is in range.
+    description: >
+      When set to true will check if the latest version is within the range specified by the local version 
+      and displays 'satisfied' if local version is in range.
 ```
 
 ### Preview
