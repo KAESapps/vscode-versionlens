@@ -3,8 +3,6 @@
 ![Development Phase](http://img.shields.io/phase/alpha.png?color=yellowgreen)
 
 [![Build Status](https://img.shields.io/travis/pflannery/vscode-versionlens/master.svg)](http://travis-ci.org/pflannery/vscode-versionlens "Check this project's build status on TravisCI")
-[![Dependency Status](https://img.shields.io/david/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens)
-[![Dev Dependency Status](https://img.shields.io/david/dev/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens#info=devDependencies)
 
 Shows the latest version for an npm or bower package using the code lens interface. 
 
