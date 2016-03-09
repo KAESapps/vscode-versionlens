@@ -4,7 +4,7 @@
 
 [![Build Status](https://img.shields.io/travis/pflannery/vscode-versionlens/master.svg)](http://travis-ci.org/pflannery/vscode-versionlens "Check this project's build status on TravisCI")
 [![Dependency Status](https://img.shields.io/david/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens)
-[![Dev Dependency Status](https://img.shields.io/david/dev/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens#info=devDependencies)<br/>
+[![Dev Dependency Status](https://img.shields.io/david/dev/pflannery/vscode-versionlens.svg)](https://david-dm.org/pflannery/vscode-versionlens#info=devDependencies)
 
 Shows the latest version for an npm or bower package using the code lens interface. 
 
@@ -27,7 +27,8 @@ Shows the latest version for an npm or bower package using the code lens interfa
     type: boolean
     default: false
     description: >
-      When set to true will check if the latest version is within the range specified by the local version 
+      When set to true will check if the latest version 
+      is within the range specified by the local version 
       and displays 'satisfied' if local version is in range.
 ```
 
