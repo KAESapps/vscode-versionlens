@@ -3,6 +3,9 @@ typings/**
 out/test/**
 test/**
 src/**
+grunt/**
+gruntfile.js
+.travis*
 **/*.map
 .gitignore
 tsconfig.json
