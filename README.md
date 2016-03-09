@@ -6,7 +6,13 @@
 
 Compares a single or ranged version against each package and displays the latest version if not satisfied; otherwise provides a satisfied indication.
 
-**Note:** Replaces the version text but does not automatically install packages when clicking a code lens link.
+**Note:** Replaces the version text but does not automatically install packages when clicking a code lens link. Currently Npm and bower only.
+
+### Preview
+
+- default settings
+
+![Screenshot](images/animated-preview.gif)
 
 ## Install
 
@@ -21,12 +27,6 @@ Compares a single or ranged version against each package and displays the latest
     description: >
       Inserts this prefix before the version when clicking on the code lens link.
 ```
-
-### Preview
-
-- default settings
-
-![Screenshot](images/animated-preview.gif)
 
 ### Contributors
 
