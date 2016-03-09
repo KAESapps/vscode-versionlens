@@ -59,7 +59,7 @@
         "versionlens.versionPrefix": {
           "type": "string",
           "default": "",
-          "description": "Applies the provided prefix before with the latest version when clicking on the code lens link."
+          "description": "Inserts this prefix before the version when clicking on the code lens link."
         },
         "versionlens.satisfyOnly": {
           "type": "boolean",

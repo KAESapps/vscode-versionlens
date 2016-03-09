@@ -21,7 +21,7 @@ Shows the latest version for an npm or bower package using the code lens interfa
     type: string
     default: ''
     description: >
-      Applies the provided prefix before with the latest version when clicking on the code lens link.
+      Inserts this prefix before the version when clicking on the code lens link.
 
   versionlens.satisfyOnly:
     type: boolean
