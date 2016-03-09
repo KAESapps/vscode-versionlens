@@ -13,8 +13,11 @@ export abstract class AbstractCodeLensProvider {
 
   constructor(appConfig: AppConfiguration);
   dispose();
+  
   protected makeErrorCommand(statusCode: number, errorMsg: string, codeLensItem: PackageCodeLens): PackageCodeLens;
   protected makeVersionCommand(currentVersion: string, checkVersion: string, codeLensItem: PackageCodeLens): PackageCodeLens;
+  protected makeNewVersionCommand(newerVersion: string, codeLensItem: PackageCodeLens): PackageCodeLens;
+  protected makeSatisfiedCommand(codeLensItem: PackageCodeLens): PackageCodeLens;
   protected makeLatestCommand(codeLensItem: PackageCodeLens): PackageCodeLens;
   protected makeUpdateDependenciesCommand(codeLensItem: PackageCodeLens): PackageCodeLens;
 }

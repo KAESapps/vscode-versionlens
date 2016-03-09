@@ -166,15 +166,7 @@ describe("NpmCodeLensProvider", () => {
       });
     });
 
-    it("when a valid response returned from npm and package version is 'latest' then codeLens should return LatestCommand", () => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', 'latest', false);
-      testProvider.resolveCodeLens(codeLens, null);
-      assert.equal(codeLens.command.title, 'latest', "Expected command.title failed.");
-      assert.equal(codeLens.command.command, undefined);
-      assert.equal(codeLens.command.arguments, undefined);
-    });
-
-    it("when a valid response returned from npm and package version is 'not latest' then codeLens should return VersionCommand", done => {
+    it("when a valid response returned from npm and package version is 'not latest' then codeLens should return NewVersionCommand", done => {
       const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
       httpRequestMock.xhr = options => {
         return Promise.resolve({
@@ -189,24 +181,6 @@ describe("NpmCodeLensProvider", () => {
         done();
       });
     });
-
-    it("when a valid response returned from npm and satisfyOnly=true and package version is satisfactory then codeLens should return SatisfiedCommand", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '~1.2.0', false);
-      httpRequestMock.xhr = options => {
-        return Promise.resolve({
-          status: 200,
-          responseText: '{"version": "1.2.4"}'
-        });
-      };
-      satisfyOnly = true;
-      testProvider.resolveCodeLens(codeLens, null).then(result => {
-        assert.equal(codeLens.command.title, 'satisfied', "Expected command.title failed.");
-        assert.equal(codeLens.command.command, undefined);
-        assert.equal(codeLens.command.arguments, undefined);
-        done();
-      });
-    });
-
 
   });
 

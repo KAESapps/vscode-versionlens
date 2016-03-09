@@ -4,7 +4,7 @@
 
 [![Build Status](https://img.shields.io/travis/pflannery/vscode-versionlens/master.svg)](http://travis-ci.org/pflannery/vscode-versionlens "Check this project's build status on TravisCI")
 
-Shows the latest version for an npm or bower package using the code lens interface. 
+Compares a single or ranged version against each package and displays the latest version if not satisfied; otherwise provides a satisfied indication.
 
 **Note:** Replaces the version text but does not automatically install packages when clicking a code lens link.
 
@@ -20,14 +20,6 @@ Shows the latest version for an npm or bower package using the code lens interfa
     default: ''
     description: >
       Inserts this prefix before the version when clicking on the code lens link.
-
-  versionlens.satisfyOnly:
-    type: boolean
-    default: false
-    description: >
-      When set to true will check if the latest version 
-      is within the range specified by the local version 
-      and displays 'satisfied' if local version is in range.
 ```
 
 ### Preview
@@ -35,10 +27,6 @@ Shows the latest version for an npm or bower package using the code lens interfa
 - default settings
 
 ![Screenshot](images/animated-preview.gif)
-
-- when versionlens.satisfyOnly = true
-
-![Screenshot](images/animated-preview-2.gif)
 
 ### Contributors
 

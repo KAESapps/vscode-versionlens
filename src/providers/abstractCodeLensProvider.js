@@ -33,17 +33,34 @@ export abstract class AbstractCodeLensProvider {
     return codeLensItem;
   }
 
-  makeVersionCommand(currentVersion, serverVersion, codeLensItem) {
-    const satisfied = resolve.semver.satisfies(serverVersion, currentVersion);
-    const hasNewerVersion = resolve.semver.gtr(serverVersion, currentVersion) === true
-      || resolve.semver.ltr(serverVersion, currentVersion) === true;
+  makeVersionCommand(localVersion, serverVersion, codeLensItem) {
+    const isValid = resolve.semver.valid(localVersion);
+    const isValidRange = resolve.semver.validRange(localVersion);
 
-    if (this.appConfig.satisfyOnly && satisfied)
-      return this.makeSatisfiedCommand(codeLensItem);
-    else if (serverVersion !== currentVersion && hasNewerVersion)
-      return this.makeNewVersionCommand(serverVersion, codeLensItem)
-    else
+    if (!isValid && !isValidRange && localVersion !== 'latest')
+      return this.makeErrorCommand(-1, "Invalid version entered", codeLensItem);
+
+    if (localVersion === 'latest')
       return this.makeLatestCommand(codeLensItem);
+
+    if (this.appConfig.satisfyOnly === true
+      && resolve.semver.satisfies(serverVersion, localVersion))
+      return this.makeSatisfiedCommand(serverVersion, codeLensItem);
+
+    if (isValidRange && !isValid) {
+      if (resolve.semver.satisfies(serverVersion, localVersion))
+        return this.makeSatisfiedCommand(serverVersion, codeLensItem);
+      else
+        return this.makeNewVersionCommand(serverVersion, codeLensItem)
+    }
+
+    const hasNewerVersion = resolve.semver.gt(serverVersion, localVersion) === true
+      || resolve.semver.lt(serverVersion, localVersion) === true;
+
+    if (serverVersion !== localVersion && hasNewerVersion)
+      return this.makeNewVersionCommand(serverVersion, codeLensItem)
+
+    return this.makeLatestCommand(codeLensItem);
   }
 
   makeNewVersionCommand(newerVersion, codeLensItem) {
@@ -58,9 +75,9 @@ export abstract class AbstractCodeLensProvider {
     return codeLensItem;
   }
 
-  makeSatisfiedCommand(codeLensItem) {
+  makeSatisfiedCommand(serverVersion, codeLensItem) {
     codeLensItem.command = {
-      title: 'satisfied',
+      title: `satisfies v${serverVersion}`,
       command: undefined,
       arguments: undefined
     };
