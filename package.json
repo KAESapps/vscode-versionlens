@@ -10,7 +10,7 @@
   "license": "MIT",
   "version": "0.1.1",
   "publisher": "pflannery",
-  "displyName": "Version Lens",
+  "displayName": "Version Lens",
   "icon": "images/logo.png",
   "engines": {
     "vscode": "0.10.x"
