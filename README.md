@@ -10,8 +10,6 @@ Compares a single or ranged version against each package and displays the latest
 
 ### Preview
 
-- default settings
-
 ![Screenshot](images/animated-preview.gif)
 
 ## Install
