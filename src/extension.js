@@ -6,6 +6,7 @@ import {bootstrapLoaded} from './bootstrap';
 import {Disposable, DocumentSelector, languages, commands} from 'vscode';
 import {NpmCodeLensProvider} from './providers/npmCodeLensProvider';
 import {BowerCodeLensProvider} from './providers/bowerCodeLensProvider';
+import {DubCodeLensProvider} from './providers/dubCodeLensProvider';
 import {updateDependencyCommand, updateDependenciesCommand} from './commands';
 import {AppConfiguration} from './models/appConfiguration';
 
@@ -25,6 +26,12 @@ export function activate(context) {
     pattern: '**/bower.json'
   };
 
+  const dubSelector = {
+    language: 'json',
+    scheme: 'file',
+    pattern: '**/dub.json'
+  };
+
   const config = new AppConfiguration();
 
   const disposables = [];
@@ -39,6 +46,13 @@ export function activate(context) {
     languages.registerCodeLensProvider(
       bowerSelector,
       new BowerCodeLensProvider(config)
+    )
+  );
+
+  disposables.push(
+    languages.registerCodeLensProvider(
+      dubSelector,
+      new DubCodeLensProvider(config)
     )
   );
 
