@@ -2,7 +2,6 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {resolve} from '../common/di';
 import {assertDefined} from '../common/typeAssertion';
 import {Range, Uri} from 'vscode';
 import {PackageCodeLens} from '../models/packageCodeLens';
@@ -25,11 +24,6 @@ export class PackageCodeLensList {
       this.document.positionAt(packageEntry.end)
     );
     const parent = packageEntry.type === 'object';
-    // if (parent === false)
-    //   packageValue = resolve.semver.clean(packageEntry.value);
-    // let packageValue = '';
-    // if (resolve.semver.valid(packageValue) === null)
-    //   packageValue = '0.0.0';
 
     this.collection.push(
       new PackageCodeLens(

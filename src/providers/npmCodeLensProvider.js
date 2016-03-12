@@ -2,13 +2,14 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {resolve} from '../common/di';
+import {InstantiateMixin} from '../common/di';
 import {PackageCodeLens} from '../models/packageCodeLens';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
 import {PackageCodeLensList} from '../lists/packageCodeLensList'
 
-export class NpmCodeLensProvider extends AbstractCodeLensProvider {
-
+export class NpmCodeLensProvider
+  extends InstantiateMixin(['jsonParser', 'httpRequest'], AbstractCodeLensProvider) {
+    
   constructor(config) {
     super(config);
     this.packageDependencyKeys = [
@@ -20,7 +21,7 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider {
   }
 
   provideCodeLenses(document, token) {
-    const jsonDoc = resolve.jsonParser.parse(document.getText());
+    const jsonDoc = super.jsonParser.parse(document.getText());
     const collector = new PackageCodeLensList(document);
 
     if (jsonDoc === null || jsonDoc.root === null)
@@ -52,7 +53,7 @@ export class NpmCodeLensProvider extends AbstractCodeLensProvider {
       }
 
       const queryUrl = `http://registry.npmjs.org/${encodeURIComponent(codeLensItem.packageName)}/latest`;
-      return resolve.httpRequest.xhr({ url: queryUrl })
+      return super.httpRequest.xhr({ url: queryUrl })
         .then(response => {
           if (response.status != 200)
             return super.makeErrorCommand(

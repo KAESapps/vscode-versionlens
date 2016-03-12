@@ -25,18 +25,14 @@ describe("NpmCodeLensProvider", () => {
   let testProvider;
   let httpRequestMock = {};
   let appConfigMock = new AppConfiguration();
-  let satisfyOnly;
   let defaultVersionPrefix;
   Object.defineProperty(appConfigMock, 'versionPrefix', { get: () => defaultVersionPrefix })
-  Object.defineProperty(appConfigMock, 'satisfyOnly', { get: () => satisfyOnly })
 
   beforeEach(() => {
     register('semver', semver);
     register('jsonParser', jsonParser);
     register('httpRequest', httpRequestMock);
-
     // mock the config
-    satisfyOnly = false;
     defaultVersionPrefix = '^';
     testProvider = new NpmCodeLensProvider(appConfigMock);
   });

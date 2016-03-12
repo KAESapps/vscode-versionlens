@@ -2,11 +2,12 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {resolve} from '../common/di';
+import {InstantiateMixin} from '../common/di';
 import {assertInstanceOf} from '../common/typeAssertion';
 import {AppConfiguration} from '../models/appConfiguration';
 
-export abstract class AbstractCodeLensProvider {
+export abstract class AbstractCodeLensProvider
+  extends InstantiateMixin(['semver']) {
 
   constructor(appConfig) {
     assertInstanceOf(
@@ -34,8 +35,8 @@ export abstract class AbstractCodeLensProvider {
   }
 
   makeVersionCommand(localVersion, serverVersion, codeLensItem) {
-    const isValid = resolve.semver.valid(localVersion);
-    const isValidRange = resolve.semver.validRange(localVersion);
+    const isValid = super.semver.valid(localVersion);
+    const isValidRange = super.semver.validRange(localVersion);
 
     if (!isValid && !isValidRange && localVersion !== 'latest')
       return this.makeErrorCommand(-1, "Invalid version entered", codeLensItem);
@@ -44,18 +45,18 @@ export abstract class AbstractCodeLensProvider {
       return this.makeLatestCommand(codeLensItem);
 
     if (this.appConfig.satisfyOnly === true
-      && resolve.semver.satisfies(serverVersion, localVersion))
+      && super.semver.satisfies(serverVersion, localVersion))
       return this.makeSatisfiedCommand(serverVersion, codeLensItem);
 
     if (isValidRange && !isValid) {
-      if (resolve.semver.satisfies(serverVersion, localVersion))
+      if (super.semver.satisfies(serverVersion, localVersion))
         return this.makeSatisfiedCommand(serverVersion, codeLensItem);
       else
         return this.makeNewVersionCommand(serverVersion, codeLensItem)
     }
 
-    const hasNewerVersion = resolve.semver.gt(serverVersion, localVersion) === true
-      || resolve.semver.lt(serverVersion, localVersion) === true;
+    const hasNewerVersion = super.semver.gt(serverVersion, localVersion) === true
+      || super.semver.lt(serverVersion, localVersion) === true;
 
     if (serverVersion !== localVersion && hasNewerVersion)
       return this.makeNewVersionCommand(serverVersion, codeLensItem)
