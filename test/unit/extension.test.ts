@@ -3,3 +3,4 @@ require('./common/di.tests');
 require('./providers/abstractCodeLensProvider.tests');
 require('./providers/npmCodeLensProvider.tests');
 require('./providers/bowerCodeLensProvider.tests');
+require('./providers/dubCodeLensProvider.tests');
