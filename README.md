@@ -6,7 +6,13 @@
 
 Compares a single or ranged version against each package and displays the latest version if not satisfied; otherwise provides a satisfied indication.
 
-**Note:** Replaces the version text but does not automatically install packages when clicking a code lens link. Currently Npm and bower only.
+**Note:** Replaces the version text but does not automatically install packages when clicking a code lens link. 
+
+Currently supports
+
+- bower http://bower.io/
+- dub https://code.dlang.org, and
+- npm https://www.npmjs.com/
 
 ### Preview
 
@@ -18,19 +24,16 @@ Compares a single or ranged version against each package and displays the latest
 
 ### Available Workspace\\User Settings
 
-```yaml
-  versionlens.versionPrefix:
-    type: string
-    default: ''
-    description: >
-      Inserts this prefix before the version when clicking on the code lens link.
-```
+Property|Type|Default|Description
+--------|----|-------|-----------
+versionlens.versionPrefix|string||Inserts this prefix before the version <br>when clicking on the code lens link.
 
 ### Contributors
 
 These are the people that have contributed code to this project:
 
 - [pflannery](https://github.com/pflannery) — [view contributions](https://github.com/pflannery/vscode-versionlens/commits?author=pflannery)
+- [WebFreak001](https://github.com/WebFreak001) — [view contributions](https://github.com/pflannery/vscode-versionlens/commits?author=WebFreak001)
 
 ### License
 
