@@ -28,7 +28,6 @@ describe("DubCodeLensProvider", () => {
   let satisfyOnly;
   let defaultVersionPrefix;
   Object.defineProperty(appConfigMock, 'versionPrefix', { get: () => defaultVersionPrefix })
-  Object.defineProperty(appConfigMock, 'satisfyOnly', { get: () => satisfyOnly })
 
   beforeEach(() => {
     register('semver', semver);
@@ -36,7 +35,6 @@ describe("DubCodeLensProvider", () => {
     register('httpRequest', httpRequestMock);
 
     // mock the config
-    satisfyOnly = false;
     defaultVersionPrefix = '^';
     testProvider = new DubCodeLensProvider(appConfigMock);
   });

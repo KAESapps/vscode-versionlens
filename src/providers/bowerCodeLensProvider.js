@@ -2,12 +2,13 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {resolve} from '../common/di';
+import {InstantiateMixin} from '../common/di';
 import {PackageCodeLens} from '../models/packageCodeLens';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
 import {PackageCodeLensList} from '../lists/packageCodeLensList'
 
-export class BowerCodeLensProvider extends AbstractCodeLensProvider {
+export class BowerCodeLensProvider
+  extends InstantiateMixin(['jsonParser', 'bower'], AbstractCodeLensProvider) {
 
   constructor(appConfig) {
     super(appConfig);
@@ -15,7 +16,7 @@ export class BowerCodeLensProvider extends AbstractCodeLensProvider {
   }
 
   provideCodeLenses(document, token) {
-    const jsonDoc = resolve.jsonParser.parse(document.getText());
+    const jsonDoc = super.jsonParser.parse(document.getText());
     const collector = new PackageCodeLensList(document);
 
     if (jsonDoc === null || jsonDoc.root === null)
@@ -39,7 +40,7 @@ export class BowerCodeLensProvider extends AbstractCodeLensProvider {
         return;
       }
       return new Promise(success => {
-        resolve.bower.commands.info(codeLensItem.packageName)
+        super.bower.commands.info(codeLensItem.packageName)
           .on('end', (info) => {
             if (!info || !info.latest) {
               success(super.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem));

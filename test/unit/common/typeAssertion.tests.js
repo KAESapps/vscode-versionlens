@@ -40,7 +40,7 @@ describe('TypeAssertion', () => {
       let testThrowFn = () => {
         assertTypeOf('', 'string', 'String is a typeof string');
       };
-       assert.doesNotThrow(testThrowFn, ReferenceError, 'String is a typeof string');
+      assert.doesNotThrow(testThrowFn, ReferenceError, 'String is a typeof string');
     });
 
   });
@@ -58,7 +58,7 @@ describe('TypeAssertion', () => {
       let testThrowFn = () => {
         assertDefined('', 'parameter is defined');
       };
-       assert.doesNotThrow(testThrowFn, ReferenceError, 'parameter is defined');
+      assert.doesNotThrow(testThrowFn, ReferenceError, 'parameter is defined');
     });
 
   });
@@ -81,12 +81,12 @@ describe('TypeAssertion', () => {
       let testThrowFn = () => {
         assertEmpty('1', 'string is empty');
       };
-       assert.doesNotThrow(testThrowFn, 'string is empty');
+      assert.doesNotThrow(testThrowFn, 'string is empty');
 
       testThrowFn = () => {
         assertEmpty([1], 'array is empty');
       };
-       assert.doesNotThrow(testThrowFn, 'array is empty');
+      assert.doesNotThrow(testThrowFn, 'array is empty');
     });
 
   });

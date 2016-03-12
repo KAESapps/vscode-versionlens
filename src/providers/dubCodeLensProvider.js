@@ -2,12 +2,13 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {resolve} from '../common/di';
+import {InstantiateMixin} from '../common/di';
 import {PackageCodeLens} from '../models/packageCodeLens';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
 import {PackageCodeLensList} from '../lists/packageCodeLensList'
 
-export class DubCodeLensProvider extends AbstractCodeLensProvider {
+export class DubCodeLensProvider
+  extends InstantiateMixin(['jsonParser', 'httpRequest'], AbstractCodeLensProvider) {
 
   constructor(config) {
     super(config);
@@ -20,7 +21,7 @@ export class DubCodeLensProvider extends AbstractCodeLensProvider {
   }
 
   provideCodeLenses(document, token) {
-    const jsonDoc = resolve.jsonParser.parse(document.getText());
+    const jsonDoc = super.jsonParser.parse(document.getText());
     const collector = new PackageCodeLensList(document);
 
     if (jsonDoc === null || jsonDoc.root === null)
@@ -57,7 +58,7 @@ export class DubCodeLensProvider extends AbstractCodeLensProvider {
       }
 
       const queryUrl = `http://code.dlang.org/api/packages/${encodeURIComponent(codeLensItem.packageName)}/latest`;
-      return resolve.httpRequest.xhr({ url: queryUrl })
+      return super.httpRequest.xhr({ url: queryUrl })
         .then(response => {
           if (response.status != 200)
             return super.makeErrorCommand(
