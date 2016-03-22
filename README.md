@@ -23,7 +23,7 @@ Supports
 
 ### Available Workspace\\User Settings
 
-```json
+```js
 {
   // Inserts this prefix before the version when clicking on the code lens link.
   "versionlens.versionPrefix": "" // left blank as default
