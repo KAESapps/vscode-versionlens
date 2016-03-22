@@ -2,21 +2,31 @@
  *  Copyright (c) Peter Flannery. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import {InstantiateMixin} from '../common/di';
+import {inject} from '../common/di';
 import {PackageCodeLens} from '../models/packageCodeLens';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
 import {PackageCodeLensList} from '../lists/packageCodeLensList'
 
-export class BowerCodeLensProvider
-  extends InstantiateMixin(['jsonParser', 'bower'], AbstractCodeLensProvider) {
+@inject('jsonParser', 'bower')
+export class BowerCodeLensProvider extends AbstractCodeLensProvider {
 
-  constructor(appConfig) {
+  constructor(
+    appConfig
+  ) {
     super(appConfig);
     this.packageDependencyKeys = ['dependencies', 'devDependencies'];
   }
 
+  get selector() {
+    return {
+      language: 'json',
+      scheme: 'file',
+      pattern: '**/bower.json'
+    }
+  };
+
   provideCodeLenses(document, token) {
-    const jsonDoc = super.jsonParser.parse(document.getText());
+    const jsonDoc = this.jsonParser.parse(document.getText());
     const collector = new PackageCodeLensList(document);
 
     if (jsonDoc === null || jsonDoc.root === null)
@@ -36,20 +46,20 @@ export class BowerCodeLensProvider
   resolveCodeLens(codeLensItem, token) {
     if (codeLensItem instanceof PackageCodeLens) {
       if (codeLensItem.packageVersion === 'latest') {
-        super.makeLatestCommand(codeLensItem);
+        this.makeLatestCommand(codeLensItem);
         return;
       }
       return new Promise(success => {
-        super.bower.commands.info(codeLensItem.packageName)
+        this.bower.commands.info(codeLensItem.packageName)
           .on('end', (info) => {
             if (!info || !info.latest) {
-              success(super.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem));
+              success(this.makeErrorCommand(-1, "Invalid object returned from server", codeLensItem));
               return;
             }
-            success(super.makeVersionCommand(codeLensItem.packageVersion, info.latest.version, codeLensItem));
+            success(this.makeVersionCommand(codeLensItem.packageVersion, info.latest.version, codeLensItem));
           })
           .on('error', (err) => {
-            success(super.makeErrorCommand(-1, err.message, codeLensItem));
+            success(this.makeErrorCommand(-1, err.message, codeLensItem));
           });
       });
     }

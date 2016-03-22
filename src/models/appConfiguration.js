@@ -15,9 +15,4 @@ export class AppConfiguration {
     return config.get("versionPrefix", "");
   }
 
-  get satisfyOnly() {
-    const config = workspace.getConfiguration('versionlens');
-    return config.get("satisfyOnly", false);
-  }
-
 }

@@ -7,16 +7,16 @@ import {PackageCodeLens} from '../models/packageCodeLens';
 import {AbstractCodeLensProvider} from './abstractCodeLensProvider';
 import {PackageCodeLensList} from '../lists/packageCodeLensList'
 
+// TODO retrieve multiple sources from nuget.config
+const FEED_URL = 'https://api.nuget.org/v3-flatcontainer';
+
 @inject('jsonParser', 'httpRequest')
-export class DubCodeLensProvider extends AbstractCodeLensProvider {
+export class DotNetCodeLensProvider extends AbstractCodeLensProvider {
 
   constructor(config) {
     super(config);
     this.packageDependencyKeys = [
-      'dependencies',
-      'devDependencies',
-      'peerDependencies',
-      'optionalDependencies'
+      'dependencies'
     ];
   }
 
@@ -24,25 +24,20 @@ export class DubCodeLensProvider extends AbstractCodeLensProvider {
     return {
       language: 'json',
       scheme: 'file',
-      pattern: '**/dub.json'
-    };
-  }
+      pattern: '**/project.json'
+    }
+  };
 
   provideCodeLenses(document, token) {
     const jsonDoc = this.jsonParser.parse(document.getText());
-    const collector = new PackageCodeLensList(document);
-
     if (jsonDoc === null || jsonDoc.root === null)
       return [];
 
     if (jsonDoc.validationResult.errors.length > 0)
       return [];
 
-    jsonDoc.root.getChildNodes().forEach((node) => {
-      if (this.packageDependencyKeys.indexOf(node.key.value) !== -1) {
-        collector.addRange(node.value.getChildNodes());
-      }
-    });
+    const collector = new PackageCodeLensList(document);
+    this.enumerateAllEntries_(jsonDoc.root, collector);
 
     return collector.list;
   }
@@ -55,12 +50,7 @@ export class DubCodeLensProvider extends AbstractCodeLensProvider {
         return;
       }
 
-      if (codeLensItem.packageVersion === '~master') {
-        super.makeLatestCommand(codeLensItem);
-        return;
-      }
-
-      const queryUrl = `http://code.dlang.org/api/packages/${encodeURIComponent(codeLensItem.packageName)}/latest`;
+      const queryUrl = `${FEED_URL}/${codeLensItem.packageName}/index.json`;
       return this.httpRequest.xhr({ url: queryUrl })
         .then(response => {
           if (response.status != 200)
@@ -70,8 +60,9 @@ export class DubCodeLensProvider extends AbstractCodeLensProvider {
               codeLensItem
             );
 
-          const verionStr = JSON.parse(response.responseText);
-          if (typeof verionStr !== "string")
+          const pkg = JSON.parse(response.responseText);
+          const serverVersion = pkg.versions[pkg.versions.length - 1];
+          if (!serverVersion)
             return super.makeErrorCommand(
               -1,
               "Invalid object returned from server",
@@ -80,17 +71,43 @@ export class DubCodeLensProvider extends AbstractCodeLensProvider {
 
           return super.makeVersionCommand(
             codeLensItem.packageVersion,
-            verionStr,
+            serverVersion,
             codeLensItem
           );
-        }, response => {
-          const respObj = JSON.parse(response.responseText);
+
+        }, errResponse => {
           return super.makeErrorCommand(
-            response.status,
-            respObj.statusMessage,
+            errResponse.status,
+            queryUrl,
             codeLensItem
           );
         });
     }
   }
+
+  enumerateAllEntries_(node, collector) {
+    const childNodes = node.getChildNodes();
+    childNodes.forEach(childNode => {
+      if (this.packageDependencyKeys.indexOf(childNode.key.value) !== -1)
+        //this.parseDependencies_(childNode.value.getChildNodes(), collector);
+        collector.addRange(childNode.value.getChildNodes());
+      else if (childNode.value.type === 'object')
+        this.enumerateAllEntries_(childNode.value, collector);
+    });
+  }
+
+  createRequestUrl_(baseUrl, packageId) {
+    return `${baseUrl}/${packageId}/index.json`;
+  }
+
+  extractVersionFromXml_(xmlResponse) {
+    const versionExp = /<d:Version>(.*)<\/d:Version>/;
+    const results = xmlResponse.match(versionExp);
+    return results && results.length > 1 ? results[1] : '';
+  }
+
+  getPackageSources_() {
+    return [''];
+  }
+
 }

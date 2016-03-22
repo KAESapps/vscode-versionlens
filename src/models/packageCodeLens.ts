@@ -8,19 +8,19 @@ export class PackageCodeLens extends CodeLens {
   uri: Uri;
   packageName: string;
   packageVersion: string;
-  parent: boolean;
+  versionRange: Range;
 
   constructor(
-    range: Range,
+    idRange: Range,
+    versionRange: Range,
     uri: Uri,
     packageName: string,
-    packageVersion: string,
-    parent: boolean
+    packageVersion: string
   ) {
-    super(range);
+    super(idRange);
     this.uri = uri;
     this.packageName = packageName;
     this.packageVersion = packageVersion;
-    this.parent = parent;
+    this.versionRange = versionRange || idRange;
   }
 }

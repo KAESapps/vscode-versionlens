@@ -42,10 +42,17 @@ describe("AbstractCodeLensProvider", () => {
 
     it("when local version is invalid then should return ErrorCommand", () => {
       const testLens = testProvider.makeVersionCommand('blah', 'latest', {});
-      assert.equal(testLens.command.title, 'Error -1. Invalid version entered', "Expected command.title failed.");
+      assert.equal(testLens.command.title, 'Error -1. Invalid semver version entered', "Expected command.title failed.");
       assert.equal(testLens.command.command, undefined);
       assert.equal(testLens.command.arguments, undefined);
     });
+
+    it("when server version is invalid then should return ErrorCommand", () => {
+      const testLens = testProvider.makeVersionCommand('1.2.3', '1.0.0.5', {});
+      assert.equal(testLens.command.title, 'Error -1. Invalid semver server version received, 1.0.0.5', "Expected command.title failed.");
+      assert.equal(testLens.command.command, undefined);
+      assert.equal(testLens.command.arguments, undefined);
+    })
 
     it("when server and local version are 'latest' then codeLens should return LatestCommand", () => {
       const testLens = testProvider.makeVersionCommand('latest', 'latest', {});
