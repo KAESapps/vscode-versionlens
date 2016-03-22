@@ -96,7 +96,7 @@ describe("NpmCodeLensProvider", () => {
   describe("resolveCodeLens", () => {
 
     it("passes url to httpRequest.xhr", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      const codeLens = new PackageCodeLens(null, null, null, 'SomePackage', '1.2.3', false);
       httpRequestMock.xhr = options => {
         assert.equal(options.url, 'http://registry.npmjs.org/SomePackage/latest', "Expected httpRequest.xhr(options.url) but failed.");
         done();
@@ -109,7 +109,7 @@ describe("NpmCodeLensProvider", () => {
     });
 
     it("when npm does not return status 200 then codeLens should return ErrorCommand", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      const codeLens = new PackageCodeLens(null, null, null, 'SomePackage', '1.2.3', false);
       httpRequestMock.xhr = options => {
         return Promise.resolve({
           status: 404,
@@ -126,7 +126,7 @@ describe("NpmCodeLensProvider", () => {
     });
 
     it("when null response object returned from npm then codeLens should return ErrorCommand", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      const codeLens = new PackageCodeLens(null, null, null, 'SomePackage', '1.2.3', false);
 
       httpRequestMock.xhr = options => {
         return Promise.resolve({
@@ -145,7 +145,7 @@ describe("NpmCodeLensProvider", () => {
     });
 
     it("when response version is missing then codeLens should return ErrorCommand", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      const codeLens = new PackageCodeLens(null, null, null, 'SomePackage', '1.2.3', false);
 
       httpRequestMock.xhr = options => {
         return Promise.resolve({
@@ -163,7 +163,7 @@ describe("NpmCodeLensProvider", () => {
     });
 
     it("when a valid response returned from npm and package version is 'not latest' then codeLens should return NewVersionCommand", done => {
-      const codeLens = new PackageCodeLens(null, null, 'SomePackage', '1.2.3', false);
+      const codeLens = new PackageCodeLens(null, null, null, 'SomePackage', '1.2.3', false);
       httpRequestMock.xhr = options => {
         return Promise.resolve({
           status: 200,

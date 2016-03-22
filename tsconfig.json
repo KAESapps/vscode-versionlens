@@ -7,7 +7,8 @@
     "noLib": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true
+    "allowJs": true,
+    "experimentalDecorators": true
   },
   "exclude": [
     "gruntfile.js",

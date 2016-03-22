@@ -4,54 +4,45 @@
  *--------------------------------------------------------------------------------------------*/
 import {assertDefined} from './typeAssertion';
 
+const resolveMap = {};
+
+/**
+ * resolves dependencies from the resolve map
+ */
 export function resolve(dependencyKey) {
-  const instance = resolve[dependencyKey];
+  const instance = resolveMap[dependencyKey];
   assertDefined(instance, `Resolve: Could not resolve dependency {${dependencyKey}}`);
   return instance;
 }
 
+/**
+ * registers dependencies to the resolve map
+ */
 export function register(dependencyKey, instance) {
-  Object.defineProperty(resolve, dependencyKey, {
-    value: instance,
-    writable: true
-  });
+  resolveMap[dependencyKey] = instance;
 }
 
 /**
- * Creates a man in the middle class
- * which stores a reference to the requested dependencies.
- * If superClass is defined then the man in the middle class will extend from superClass.
+ * injects dependencies found in the resolve map
  */
-export function InstantiateMixin(dependencies, superClass) {
-  let mixinClass;
-  if (!superClass)
-    mixinClass = class { };
-  else
-    mixinClass = class extends superClass { };
+export function inject() {
+  const resolvableKeys = [];
+  for (var index = 0; index < arguments.length; index++) {
+    resolvableKeys.push(arguments[index]);
+  }
 
-  // stote a ref to the dependency map
-  Object.defineProperty(mixinClass.prototype, `__injected`, {
-    value: resolve
-  });
+  return function(target, key, desc) {
+    const prototype = target.prototype;
+    if (!prototype.__resolve)
+      prototype.__resolve = resolve;
 
-  // store a reference for each requested dependency on to the mixin class
-  dependencies.forEach(dependency => {
-    const lookupKey = dependency.name || dependency;
-
-    // define the lookup variable for this dependency
-    Object.defineProperty(mixinClass.prototype, `__${lookupKey}`, {
-      value: lookupKey,
-      enumerable: false
-    });
-
-    // define the getter for this dependency instance
-    Object.defineProperty(mixinClass.prototype, lookupKey, {
-      get() {
-        return this.__injected(this[`__${lookupKey}`]);
-      }
-    });
-
-  });
-
-  return mixinClass;
+    for (let index = 0; index < resolvableKeys.length; index++) {
+      let resolveKey = resolvableKeys[index];
+      Object.defineProperty(prototype, resolveKey, {
+        get() {
+          return this.__resolve(resolveKey);
+        }
+      });
+    }
+  }
 }

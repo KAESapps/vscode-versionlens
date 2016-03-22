@@ -3,10 +3,12 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import {bootstrapLoaded} from './bootstrap';
+import * as vscode from 'vscode';
 import {Disposable, DocumentSelector, languages, commands} from 'vscode';
 import {NpmCodeLensProvider} from './providers/npmCodeLensProvider';
 import {BowerCodeLensProvider} from './providers/bowerCodeLensProvider';
 import {DubCodeLensProvider} from './providers/dubCodeLensProvider';
+import {DotNetCodeLensProvider} from './providers/dotNetCodeLensProvider';
 import {updateDependencyCommand, updateDependenciesCommand} from './commands';
 import {AppConfiguration} from './models/appConfiguration';
 
@@ -14,47 +16,23 @@ export function activate(context) {
   if (bootstrapLoaded === false)
     throw ReferenceError("VersionCodelens: didnt execute it's bootstrap.");
 
-  const npmSelector = {
-    language: 'json',
-    scheme: 'file',
-    pattern: '**/package.json'
-  };
-
-  const bowerSelector = {
-    language: 'json',
-    scheme: 'file',
-    pattern: '**/bower.json'
-  };
-
-  const dubSelector = {
-    language: 'json',
-    scheme: 'file',
-    pattern: '**/dub.json'
-  };
-
   const config = new AppConfiguration();
-
   const disposables = [];
-  disposables.push(
-    languages.registerCodeLensProvider(
-      npmSelector,
-      new NpmCodeLensProvider(config)
-    )
-  );
+  const providers = [
+    new NpmCodeLensProvider(config),
+    new BowerCodeLensProvider(config),
+    new DubCodeLensProvider(config),
+    new DotNetCodeLensProvider(config)
+  ];
 
-  disposables.push(
-    languages.registerCodeLensProvider(
-      bowerSelector,
-      new BowerCodeLensProvider(config)
-    )
-  );
-
-  disposables.push(
-    languages.registerCodeLensProvider(
-      dubSelector,
-      new DubCodeLensProvider(config)
-    )
-  );
+  providers.forEach(provider => {
+    disposables.push(
+      languages.registerCodeLensProvider(
+        provider.selector,
+        provider
+      )
+    );
+  })
 
   disposables.push(
     commands.registerCommand(

@@ -6,7 +6,7 @@ import {workspace, TextEdit, WorkspaceEdit} from 'vscode';
 
 export function updateDependencyCommand(codeLens, packageVersion) {
   const edit = new WorkspaceEdit();
-  const edits = [TextEdit.replace(codeLens.range, packageVersion)];
+  const edits = [TextEdit.replace(codeLens.versionRange, packageVersion)];
   edit.set(codeLens.uri, edits);
   return workspace.applyEdit(edit);
 }

@@ -19,19 +19,28 @@ export class PackageCodeLensList {
 
   add(node) {
     const packageEntry = node.value;
-    const range = new Range(
+    const idRange = new Range(
       this.document.positionAt(packageEntry.start),
       this.document.positionAt(packageEntry.end)
     );
-    const parent = packageEntry.type === 'object';
+    let packageName = packageEntry.name;
+    let packageVersion = packageEntry.value;
+    let versionRange = idRange;
+
+    // handle cases where version is stored as a child property.
+    if (packageEntry.type === 'object') {
+      const versionInfo = this.getVersionRangeFromParent(node.value);
+      versionRange = versionInfo.range;
+      packageVersion = versionInfo.value;
+    }
 
     this.collection.push(
       new PackageCodeLens(
-        range,
+        idRange,
+        versionRange,
         Uri.file(this.document.fileName),
-        packageEntry.name,
-        packageEntry.value,
-        parent
+        packageName,
+        packageVersion
       )
     );
   }
@@ -42,6 +51,21 @@ export class PackageCodeLensList {
 
   get list() {
     return this.collection;
+  }
+
+  getVersionRangeFromParent(parentNode) {
+    const childNodes = parentNode.getChildNodes();
+    for (var i = 0; i < childNodes.length; i++) {
+      var childNode = childNodes[i];
+      if (childNode.key.value === 'version') {
+        return {
+          range: new Range(
+            this.document.positionAt(childNode.value.start),
+            this.document.positionAt(childNode.value.end)
+          ), value: childNode.value.value
+        };
+      }
+    }
   }
 
 }
