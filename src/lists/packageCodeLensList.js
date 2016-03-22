@@ -30,6 +30,10 @@ export class PackageCodeLensList {
     // handle cases where version is stored as a child property.
     if (packageEntry.type === 'object') {
       const versionInfo = this.getVersionRangeFromParent(node.value);
+      // if there isn't any version info then dont add this item
+      if (versionInfo === undefined)
+        return false;
+
       versionRange = versionInfo.range;
       packageVersion = versionInfo.value;
     }

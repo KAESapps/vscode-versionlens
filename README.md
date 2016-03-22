@@ -1,16 +1,15 @@
 # Version Lens - VsCode Extension
 
-![Development Phase](http://img.shields.io/phase/alpha.png?color=yellowgreen)
-
 [![Build Status](https://img.shields.io/travis/pflannery/vscode-versionlens/master.svg)](http://travis-ci.org/pflannery/vscode-versionlens "Check this project's build status on TravisCI")
 
-Compares a single or ranged version against each package and displays the latest version if not satisfied; otherwise provides a satisfied indication.
+Compares a single or ranged version against each package and displays the latest version if not satisfied; otherwise provides a satisfied indicator.
 
 **Note:** Replaces the version text but does not automatically install packages when clicking a code lens link. 
 
-Currently supports
+Supports
 
 - bower http://bower.io/
+- dotnet http://www.dotnetfoundation.org/
 - dub https://code.dlang.org, and
 - npm https://www.npmjs.com/
 
@@ -24,9 +23,12 @@ Currently supports
 
 ### Available Workspace\\User Settings
 
-Property|Type|Default|Description
---------|----|-------|-----------
-versionlens.versionPrefix|string||Inserts this prefix before the version <br>when clicking on the code lens link.
+```json
+{
+  // Inserts this prefix before the version when clicking on the code lens link.
+  "versionlens.versionPrefix": "" // left blank as default
+}
+```
 
 ### Contributors
 
