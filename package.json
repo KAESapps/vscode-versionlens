@@ -4,11 +4,11 @@
   "description": "Shows the latest version for each package using code lens",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pflannery/vscode-versionlens.git"
+    "url": "https://github.com/vscode-contrib/vscode-versionlens.git"
   },
   "author": "Peter Flannery",
   "license": "MIT",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "publisher": "pflannery",
   "displayName": "Version Lens",
   "icon": "images/logo.png",

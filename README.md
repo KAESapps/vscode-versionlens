@@ -1,6 +1,6 @@
 # Version Lens - VsCode Extension
 
-[![Build Status](https://img.shields.io/travis/pflannery/vscode-versionlens/master.svg)](http://travis-ci.org/pflannery/vscode-versionlens "Check this project's build status on TravisCI")
+[![Build Status](https://img.shields.io/travis/vscode-contrib/vscode-versionlens/master.svg)](http://travis-ci.org/vscode-contrib/vscode-versionlens "Check this project's build status on TravisCI")
 
 Compares a single or ranged version against each package and displays the latest version if not satisfied; otherwise provides a satisfied indicator.
 
@@ -32,6 +32,9 @@ Supports
 
 ### Change Log
 
+- 0.4.2
+  - Transferred this project over to https://github.com/vscode-contrib/vscode-versionlens
+
 - 0.4.1
   - replaces internal json module with external
   - replaces internal request module with external
@@ -47,11 +50,11 @@ Supports
 
 These are the people that have contributed code to this project:
 
-- [pflannery](https://github.com/pflannery) — [view contributions](https://github.com/pflannery/vscode-versionlens/commits?author=pflannery)
-- [WebFreak001](https://github.com/WebFreak001) — [view contributions](https://github.com/pflannery/vscode-versionlens/commits?author=WebFreak001)
+- [pflannery](https://github.com/pflannery) — [view contributions](https://github.com/vscode-contrib/vscode-versionlens/commits?author=pflannery)
+- [WebFreak001](https://github.com/WebFreak001) — [view contributions](https://github.com/vscode-contrib/vscode-versionlens/commits?author=WebFreak001)
 
 ### License
 
 Licensed under MIT
 
-Copyright &copy; 2016+ pflannery (https://github.com/pflannery)
+Copyright &copy; 2016+ contributors (https://github.com/vscode-contrib/vscode-versionlens/graphs/contributors)
