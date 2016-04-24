@@ -30,6 +30,19 @@ Supports
 }
 ```
 
+### Change Log
+
+- 0.4.1
+  - replaces internal json module with external
+  - replaces internal request module with external
+
+- 0.4.0
+  - Adds dotnet project.json support
+  - Fixes issue when a child version entry is not present
+
+- 0.3.0
+  - Adds dub dub.json support
+
 ### Contributors
 
 These are the people that have contributed code to this project:
