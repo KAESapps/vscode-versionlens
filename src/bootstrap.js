@@ -5,13 +5,13 @@
 import {register} from './common/di';
 const semver = require('semver');
 const bower = require('bower');
+const jsonParser = require('vscode-contrib-jsonc');
 register('semver', semver);
 register('bower', bower);
 
 // load extension deps
 import {extensions} from 'vscode';
 const jsonExt = extensions.getExtension('vscode.json');
-const jsonParser = require(jsonExt.extensionPath + '/server/out/jsonParser');
 const httpRequest = require(
   jsonExt.extensionPath + '/server/out/utils/httpRequest'
 );
